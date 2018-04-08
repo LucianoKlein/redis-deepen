@@ -8,19 +8,14 @@ public class TestAPI {
     public static void main(String[] args) {
         Jedis jedis = new Jedis("127.0.0.1", 6379);
 
-        jedis.hset("hash1", "userName", "lisi");
-        System.out.println(jedis.hget("hash1", "userName"));
-
-        System.out.println("------------------------");
-
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("telephone", "138919191919191");
-        map.put("adreess", "nanjing");
-        map.put("email", "aaa@126.com");
-        jedis.hmset("hash2", map);
-        List<String> result = jedis.hmget("hash2", "telephone", "email");
-        for (String element: result) {
-            System.out.println(element);
+        jedis.zadd("zset01", 60d, "v1");
+        jedis.zadd("zset01", 70d, "v2");
+        jedis.zadd("zset01", 80d, "v3");
+        jedis.zadd("zset01", 90d, "v4");
+        Set<String> s1 = jedis.zrevrangeByScore("zset01", 100, 0);
+        for (Iterator iterator = s1.iterator(); iterator.hasNext();) {
+            String string = (String) iterator.next();
+            System.out.println(string);
         }
 
     }
