@@ -2,30 +2,26 @@ package com.hexin.redis;
 
 import redis.clients.jedis.Jedis;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class TestAPI {
     public static void main(String[] args) {
         Jedis jedis = new Jedis("127.0.0.1", 6379);
 
-        jedis.sadd("orders", "jd001");
-        jedis.sadd("orders", "jd002");
-        jedis.sadd("orders", "jd003");
+        jedis.hset("hash1", "userName", "lisi");
+        System.out.println(jedis.hget("hash1", "userName"));
 
-        Set<String> set1 = jedis.smembers("orders");
-        for (Iterator iterator = set1.iterator(); iterator.hasNext();) {
-           String string = (String) iterator.next();
-           System.out.println(string);
+        System.out.println("------------------------");
+
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("telephone", "138919191919191");
+        map.put("adreess", "nanjing");
+        map.put("email", "aaa@126.com");
+        jedis.hmset("hash2", map);
+        List<String> result = jedis.hmget("hash2", "telephone", "email");
+        for (String element: result) {
+            System.out.println(element);
         }
 
-        jedis.srem("orders", "jd002");
-
-        set1 = jedis.smembers("orders");
-        for (Iterator iterator = set1.iterator(); iterator.hasNext();) {
-            String string = (String) iterator.next();
-            System.out.println(string);
-        }
     }
 }
